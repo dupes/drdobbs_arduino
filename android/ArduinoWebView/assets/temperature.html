@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Temperature Sensors</title>
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+		
+			function readTemperature() {
+									
+				jQuery(document).ready(function(){
+		
+					try
+					{
+						var url;
+
+						url = $("#url").val();						
+						
+						$.ajax({			
+							type: "GET",		
+							url: url
+						}).done(function(data, textStatus, jqXHR) {					
+							
+							$("#content").empty();
+														
+							data.forEach( function(sensor) {
+								
+								$("#content").append("<div>" + sensor.id + ": celsius: " + sensor.celsius + ", fahrenheit: " + sensor.fahrenheit + "</div>");
+							});
+							
+							alert('complete');
+							
+						}).fail(function (jqXHR, textStatus, errorThrown){							
+							WebInterface.logMessage("fail: " + textStatus);
+							
+						});
+					}
+					catch(err)
+					{
+						WebInterface.logMessage(err);
+					}
+				});
+			}
+		</script>
+		
+		<label>URL</label><br />
+		<input id="url" type="text" value="http://" />
+		<input type="button" value="Read Temperature" onClick="readTemperature()" />
+		
+		<div id="content">
+		</div>
+	</body>
+</html>
